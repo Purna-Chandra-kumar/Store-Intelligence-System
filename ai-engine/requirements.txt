@@ -1,0 +1,9 @@
+ultralytics==8.3.39
+supervision==0.25.1
+opencv-python-headless==4.10.0.84
+numpy==1.26.4
+redis==5.2.0
+pydantic==2.9.2
+pyyaml==6.0.2
+shapely==2.0.6
+python-dotenv==1.0.1
