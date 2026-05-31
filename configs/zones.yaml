@@ -1,0 +1,43 @@
+# Polygon zones in image coordinates (pixels).
+# Coordinates are normalized [0..1] of frame width/height so the same file
+# works for any resolution. The ai-engine multiplies by frame size at load.
+cameras:
+  cam-01:
+    zones:
+      - id: entrance
+        name: Entrance
+        type: gateway          # gateway zones trigger person_entered/exited
+        polygon:
+          - [0.02, 0.55]
+          - [0.20, 0.55]
+          - [0.20, 0.95]
+          - [0.02, 0.95]
+      - id: checkout
+        name: Checkout
+        type: queue             # queue zones run queue detection
+        polygon:
+          - [0.65, 0.50]
+          - [0.95, 0.50]
+          - [0.95, 0.95]
+          - [0.65, 0.95]
+        queue:
+          min_people: 3
+          seconds_per_person: 25
+      - id: makeup
+        name: Makeup Section
+        type: standard
+        polygon:
+          - [0.22, 0.20]
+          - [0.55, 0.20]
+          - [0.55, 0.65]
+          - [0.22, 0.65]
+        dwell_alert_seconds: 90
+      - id: skincare
+        name: Skincare Section
+        type: standard
+        polygon:
+          - [0.56, 0.18]
+          - [0.90, 0.18]
+          - [0.90, 0.48]
+          - [0.56, 0.48]
+        dwell_alert_seconds: 90

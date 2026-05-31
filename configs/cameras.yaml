@@ -1,0 +1,20 @@
+cameras:
+  - id: cam-01
+    name: Main Floor
+    source: data/cam1/sample.mp4
+    location: Ground Floor
+
+  - id: cam-02
+    name: Entrance
+    source: data/cam2/sample.mp4
+    location: Entrance
+
+  - id: cam-03
+    name: Billing
+    source: data/cam3/sample.mp4
+    location: Billing Area
+
+  - id: cam-04
+    name: Exit
+    source: data/cam4/sample.mp4
+    location: Exit

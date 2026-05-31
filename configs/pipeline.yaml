@@ -1,0 +1,24 @@
+pipeline:
+  target_fps: 8
+  detector:
+    model: yolov8n.pt
+    conf: 0.35
+    iou: 0.5
+    classes: [0]               # person only (COCO id 0)
+  tracker:
+    type: bytetrack
+    track_thresh: 0.5
+    match_thresh: 0.8
+    track_buffer: 30
+  heatmap:
+    grid: [64, 36]             # cols x rows
+    decay_per_minute: 0.05
+  anomalies:
+    crowd_spike:
+      window_seconds: 30
+      multiplier: 2.5          # 2.5x rolling baseline triggers alert
+    loitering:
+      seconds: 180
+    stationary:
+      px_radius: 40
+      seconds: 120
