@@ -1,0 +1,13 @@
+flowchart TD
+    F[frame] --> D[Detector]
+    D --> T[Tracker]
+    T --> Z[ZoneEngine]
+    T --> H[HeatmapAccumulator]
+    Z --> Q[QueueDetector]
+    Z --> AN[AnomalyEngine]
+    T --> AN
+    Z -->|zone_entered/exited| BUS[(EventBus)]
+    Q -->|queue_detected| BUS
+    AN -->|crowd / loitering / stationary| BUS
+    H -->|frame_stats| BUS
+    T -->|person_entered| BUS

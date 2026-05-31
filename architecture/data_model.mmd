@@ -1,0 +1,27 @@
+erDiagram
+    events ||--o{ anomalies : "raises"
+    events ||--o{ zone_metrics : "feeds"
+    events ||--o{ queue_metrics : "feeds"
+    events ||--o{ heatmap_snapshots : "feeds"
+    tracks ||--o{ events : "is referenced by"
+
+    events {
+      uuid event_id PK
+      text event_type
+      timestamptz ts
+      text camera_id
+      int track_id
+      text zone
+      jsonb metadata
+    }
+    tracks {
+      int track_id PK
+      text camera_id PK
+      timestamptz first_seen
+      timestamptz last_seen
+      jsonb path
+    }
+    zone_metrics { bigint id PK timestamptz ts text zone int occupancy }
+    queue_metrics { bigint id PK timestamptz ts text zone int queue_length int wait_seconds }
+    anomalies { bigint id PK timestamptz ts text kind text zone int track_id text detail jsonb metadata }
+    heatmap_snapshots { bigint id PK timestamptz ts text camera_id int cols int rows jsonb grid }

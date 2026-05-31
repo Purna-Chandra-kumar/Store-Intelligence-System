@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant C as Camera
+    participant A as ai-engine
+    participant R as Redis Streams
+    participant B as backend (consumer)
+    participant P as Postgres
+    participant W as WebSocket clients
+    C->>A: frame N
+    A->>A: detect + track
+    A->>A: zones + queue + anomaly
+    A->>R: XADD store.events {event}
+    R-->>B: XREADGROUP delivers {event}
+    B->>P: INSERT events / zone_metrics / ...
+    B->>W: broadcast JSON
+    B->>R: XACK

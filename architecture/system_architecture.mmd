@@ -1,0 +1,18 @@
+flowchart LR
+    subgraph Edge
+      CAM[CCTV / RTSP / mp4]
+      AE[ai-engine<br/>YOLOv8 + ByteTrack<br/>zones · queues · anomalies]
+    end
+    subgraph Bus
+      RS[(Redis Streams<br/>store.events)]
+    end
+    subgraph Cloud
+      BE[backend<br/>FastAPI<br/>consumer + WebSocket]
+      PG[(Postgres 16)]
+      FE[frontend<br/>React + Vite]
+    end
+    CAM --> AE --> RS
+    RS -- XREADGROUP --> BE
+    BE --> PG
+    BE -- WS --> FE
+    FE -- REST --> BE
