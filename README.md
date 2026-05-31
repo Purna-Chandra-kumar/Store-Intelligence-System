@@ -140,8 +140,23 @@ store-intelligence-system/
 - Predictive congestion using Holt-Winters on the 1-min footfall series.
 - K3s deployment manifests; current K8s sketch in `docs/SCALING.md`.
 
+#### Sample CCTV Footage
+
+Sample CCTV video files were excluded from the GitHub repository because GitHub limits files larger than 100MB.
+
+To test the system:
+
+* place CCTV `.mp4` files inside:
+
+  * `data/cam1/`
+  * `data/cam2/`
+  * `data/cam3/`
+  * `data/cam4/`
+
+Example filename:
+`sample.mp4`
+
+The AI engine will automatically process the streams and display real-time analytics on the dashboard.
+
 ---
 
-## License
-
-MIT.
