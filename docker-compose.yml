@@ -1,0 +1,111 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["6379:6379"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  ai-engine-cam-01:
+    build: ./ai-engine
+    env_file: .env
+    environment:
+      CAMERA_ID: cam-01
+      VIDEO_SOURCE: /data/cam1/sample.mp4
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/data:ro
+      - ./configs:/configs:ro
+    restart: unless-stopped
+
+  ai-engine-cam-02:
+    build: ./ai-engine
+    env_file: .env
+    environment:
+      CAMERA_ID: cam-02
+      VIDEO_SOURCE: /data/cam2/sample.mp4
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/data:ro
+      - ./configs:/configs:ro
+    restart: unless-stopped
+
+  ai-engine-cam-03:
+    build: ./ai-engine
+    env_file: .env
+    environment:
+      CAMERA_ID: cam-03
+      VIDEO_SOURCE: /data/cam3/sample.mp4
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/data:ro
+      - ./configs:/configs:ro
+    restart: unless-stopped
+
+  ai-engine-cam-04:
+    build: ./ai-engine
+    env_file: .env
+    environment:
+      CAMERA_ID: cam-04
+      VIDEO_SOURCE: /data/cam4/sample.mp4
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/data:ro
+      - ./configs:/configs:ro
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports: ["8000:8000"]
+    volumes:
+      - ./configs:/configs:ro
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    env_file: .env
+    depends_on:
+      - backend
+    ports: ["3000:3000"]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
